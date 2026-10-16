@@ -33,8 +33,11 @@ function App() {
       {voitureSelectionnee ? (
         <DetailsVoiture voiture={voitureSelectionnee} onRetour={() => setVoitureSelectionnee(null)} /> ) : (
           <>
-            <h1>AutoStock</h1>
-            <p>Un site web sur lequel vous trouverez les véhicules mis en vente par l'entreprise AutoStock.</p>
+            <section className="border-b border-neutral-200 pb-12 pt-16 px-6 max-w-7xl mx-auto">
+              <p className="font-mono text-xs uppercase tracking-widest text-black mb-3 underline underline-offset-4">SÉLECTION AUTOMOBILE</p>
+              <h1 className="text-4xl md:text-6xl font-black uppercase tracking-tight leading-none mb-6 pt-2">Véhicules D'éxception</h1>
+              <p className="text-gray-700 max-w-xl text-sm md:text-base leading-relaxed">Le meilleur véhicule au meilleur prix. Véhicules inspectés et certifiés.</p>
+            </section>
 
             <div className="flex flex-col md:flex-row gap-4 justify-center items-center my-6">
               <input className="border border-black rounded-md text-gray-500 font-semibold pl-2" placeholder="Rechercher un Véhicule..." value={recherche} onChange={(e) => setRecherche(e.target.value)}></input>
