@@ -3,31 +3,65 @@ import { useState } from "react"
 import Header from "./components/Header"
 import {voitures} from "./data/voitures"
 import CarteVoiture from "./components/CarteVoiture"
+import DetailsVoiture from "./components/DetailsVoiture"
 
 function App() {
   const [recherche, setRecherche] = useState("");
+  const [carburant, setCarburant] = useState("Tous");
+  const [tri, setTri] = useState("defaut");
+  const [voitureSelectionnee, setVoitureSelectionnee] = useState(null);
+
+  // filtre par nom ou modele
   const voituresFiltrees = voitures.filter((voiture) => {
     const marqueCorrespond = voiture.marque.toLowerCase().includes(recherche.toLowerCase());
     const modeleCorrespond = voiture.modele.toLowerCase().includes(recherche.toLowerCase());
-    return marqueCorrespond || modeleCorrespond;
+    const carburantCorrespond = carburant === "Tous" || voiture.fuel === carburant;
+    return (marqueCorrespond || modeleCorrespond ) && carburantCorrespond;
+  }) 
+  const voituresTriees = [...voituresFiltrees].sort((a,b) => {
+    if (tri === "prix-croissant") return a.prix - b.prix;
+    if (tri === "prix-decroissant") return b.prix - a.prix;
+    if (tri === "km-croissant") return a.kilometres - b.kilometres;
+    if (tri === "km-decroissant") return b.kilometres - a.kilometres;
+    return 0;
   })
 
   return (
     <>
       <Header />
-      <h1>AutoStock</h1>
-      <p>Un site web sur lequel vous trouverez les véhicules mis en vente par l'entreprise AutoStock.</p>
 
-      <input className="border border-black rounded-md text-gray-500 font-semibold pl-2" placeholder="Rechercher un Véhicule..." value={recherche} onChange={(e) => setRecherche(e.target.value)}></input>
+      {voitureSelectionnee ? (
+        <DetailsVoiture voiture={voitureSelectionnee} onRetour={() => setVoitureSelectionnee(null)} /> ) : (
+          <>
+            <h1>AutoStock</h1>
+            <p>Un site web sur lequel vous trouverez les véhicules mis en vente par l'entreprise AutoStock.</p>
 
-      
+            <div className="flex flex-col md:flex-row gap-4 justify-center items-center my-6">
+              <input className="border border-black rounded-md text-gray-500 font-semibold pl-2" placeholder="Rechercher un Véhicule..." value={recherche} onChange={(e) => setRecherche(e.target.value)}></input>
+              <select value={carburant} onChange={(e) => setCarburant(e.target.value)} className="border border-black rounded-md">
+                <option value="Tous">Tous les carburants</option>
+                <option value="Diesel">Diesel</option>
+                <option value="Essence">Essence</option>
+                <option value="Hybride">Hybride</option>
+                <option value="Electrique">Electrique</option>
+              </select>
+              <select value={tri} onChange={(e) => setTri(e.target.value)} className="border border-black rounded-md">
+                <option value="defaut">Tri par défaut</option>
+                <option value="prix-croissant">Prix: Croissant</option>
+                <option value="prix-decroissant">Prix: Décroissant</option>
+                <option value="km-croissant">Km: Croissant</option>
+                <option value="km-decroissant">Km: Décroissant</option>
+              </select>
+            </div>
 
-      {voituresFiltrees.length === 0 ? (
-        <p className="text-center font-bold my-8">Aucun véhicule ne correspond à votre recherche.</p>) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 p-6 max-w-7xl mx-auto">
-            {voituresFiltrees.map((voiture) => (
-              <CarteVoiture key={voiture.id} voiture={voiture} />))}
-          </div>
+            {voituresFiltrees.length === 0 ? (
+              <p className="text-center font-bold my-8">Aucun véhicule ne correspond à votre recherche.</p>) : (
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 p-6 max-w-7xl mx-auto">
+                  {voituresTriees.map((voiture) => (
+                    <CarteVoiture key={voiture.id} voiture={voiture} onSelectionner={() => setVoitureSelectionnee(voiture)}/>))}
+                </div>
+            )}
+          </>
         )}
     </>
   )
