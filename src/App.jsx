@@ -33,28 +33,34 @@ function App() {
       {voitureSelectionnee ? (
         <DetailsVoiture voiture={voitureSelectionnee} onRetour={() => setVoitureSelectionnee(null)} /> ) : (
           <>
-            <section className="border-b border-neutral-200 pb-12 pt-16 px-6 max-w-7xl mx-auto">
+            <section className="border-b border-black pb-12 pt-16 px-6 max-w-7xl mx-auto">
               <p className="font-mono text-xs uppercase tracking-widest text-black mb-3 underline underline-offset-4">SÉLECTION AUTOMOBILE</p>
               <h1 className="text-4xl md:text-6xl font-black uppercase tracking-tight leading-none mb-6 pt-2">Véhicules D'éxception</h1>
               <p className="text-gray-700 max-w-xl text-sm md:text-base leading-relaxed">Le meilleur véhicule au meilleur prix. Véhicules inspectés et certifiés.</p>
             </section>
 
-            <div className="flex flex-col md:flex-row gap-4 justify-center items-center my-6">
-              <input className="border border-black rounded-md text-gray-500 font-semibold pl-2" placeholder="Rechercher un Véhicule..." value={recherche} onChange={(e) => setRecherche(e.target.value)}></input>
-              <select value={carburant} onChange={(e) => setCarburant(e.target.value)} className="border border-black rounded-md">
-                <option value="Tous">Tous les carburants</option>
-                <option value="Diesel">Diesel</option>
-                <option value="Essence">Essence</option>
-                <option value="Hybride">Hybride</option>
-                <option value="Electrique">Electrique</option>
-              </select>
-              <select value={tri} onChange={(e) => setTri(e.target.value)} className="border border-black rounded-md">
-                <option value="defaut">Tri par défaut</option>
-                <option value="prix-croissant">Prix: Croissant</option>
-                <option value="prix-decroissant">Prix: Décroissant</option>
-                <option value="km-croissant">Km: Croissant</option>
-                <option value="km-decroissant">Km: Décroissant</option>
-              </select>
+            <div className="max-w-7xl mx-auto px-6 py-6 border-b border-black flex flex-col md:flex-row justify-between items-stretch md:items-center gap-4">
+              <p className="font-mono text-xs uppercase tracking-widest text-gray-800 underline underline-offset-4">
+                {voituresTriees.length} Véhicule{voituresTriees.length > 1 ? "s" : ""} Disponibles
+              </p>
+
+              <div className="flex flex-col sm:flexèrow gap-3">
+                <input className="border border-neutral-600 focus:outline-non focus:border-black px-4 py-1 text-xs font-mono uppercase tracking-wider bg-transparent placeholder:text-neutral-400" placeholder="Rechercher modèle..." value={recherche} onChange={(e) => setRecherche(e.target.value)} />
+                <select value={carburant} onChange={(e) => setCarburant(e.target.value)} className="border border-neutral-600 focus:border-black focus:outline-none px-4 py-1 text-xs font-mono uppercase tracking-wider bg-transparent cursor-pointer">
+                  <option value="Tous">Carburant : Tous</option>
+                  <option value="Diesel">Diesel</option>
+                  <option value="Essence">Essence</option>
+                  <option value="Hybride">Hybride</option>
+                  <option value="Electrique">Électrique</option>
+                </select>
+                <select value={tri} onChange={(e) => setTri(e.target.value)} className="border border-neutral-600 focus:border-black focus:outline-none px-4 py-1 text-xs font-mono uppercase tracking-wider bg-transparent cursor-pointer">
+                  <option value="defaut">Tri : Par défaut</option>
+                  <option value="prix-croissant">Prix : Croissant</option>
+                  <option value="prix-decroissant">Prix : Décroissant</option>
+                  <option value="km-croissant">KM : Croissant</option>
+                  <option value="km-decroissant">KM : Décroissant</option>
+                </select>
+              </div>
             </div>
 
             {voituresFiltrees.length === 0 ? (
