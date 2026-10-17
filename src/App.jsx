@@ -27,38 +27,50 @@ function App() {
   })
 
   return (
-    <>
+    <div className="min-h-screen bg-slate-50 text-slate-900">
       <Header />
 
       {voitureSelectionnee ? (
         <DetailsVoiture voiture={voitureSelectionnee} onRetour={() => setVoitureSelectionnee(null)} /> ) : (
           <>
-            <section className="border-b border-black pb-12 pt-16 px-6 max-w-7xl mx-auto">
-              <p className="font-mono text-xs uppercase tracking-widest text-black mb-3 underline underline-offset-4">SÉLECTION AUTOMOBILE</p>
-              <h1 className="text-4xl md:text-6xl font-black uppercase tracking-tight leading-none mb-6 pt-2">Véhicules D'éxception</h1>
-              <p className="text-gray-700 max-w-xl text-sm md:text-base leading-relaxed">Le meilleur véhicule au meilleur prix. Véhicules inspectés et certifiés.</p>
+            <section className="max-w-7xl mx-auto px-6 pt-10 pb-6">
+              <h1 className="text-3xl md:text-4xl font-bold text-slate-900">Véhicules d'occasion certifiés</h1>
+              <p className="text-slate-600 mt-2 text-sm md:text-base">Découvrez notre sélection de voitures révisées et garanties, prêtes à partir.</p>
             </section>
 
-            <div className="max-w-7xl mx-auto px-6 py-6 border-b border-black flex flex-col md:flex-row justify-between items-stretch md:items-center gap-4">
-              <p className="font-mono text-xs uppercase tracking-widest text-gray-800 underline underline-offset-4">
-                {voituresTriees.length} Véhicule{voituresTriees.length > 1 ? "s" : ""} Disponibles
+            <div className="max-w-7xl mx-auto px-6 pb-6 flex flex-col md:flex-row justify-between items-stretch md:items-center gap-4">
+              <p className="text-xs text-slate-500 font-medium">
+                <strong className="text-slate-900">{voituresTriees.length}</strong> véhicule{voituresTriees.length > 1 ? "s" : ""} disponible{voituresTriees.length > 1 ? "s" : ""}
               </p>
-
-              <div className="flex flex-col sm:flexèrow gap-3">
-                <input className="border border-neutral-600 focus:outline-non focus:border-black px-4 py-1 text-xs font-mono uppercase tracking-wider bg-transparent placeholder:text-neutral-400" placeholder="Rechercher modèle..." value={recherche} onChange={(e) => setRecherche(e.target.value)} />
-                <select value={carburant} onChange={(e) => setCarburant(e.target.value)} className="border border-neutral-600 focus:border-black focus:outline-none px-4 py-1 text-xs font-mono uppercase tracking-wider bg-transparent cursor-pointer">
-                  <option value="Tous">Carburant : Tous</option>
+                    
+              <div className="flex flex-col sm:flex-row gap-2.5">
+                <input 
+                  className="bg-white border border-slate-200 rounded-md px-3 py-1.5 text-sm text-slate-800 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500" 
+                  placeholder="Rechercher par modèle..." 
+                  value={recherche} 
+                  onChange={(e) => setRecherche(e.target.value)} 
+                />
+                <select 
+                  value={carburant} 
+                  onChange={(e) => setCarburant(e.target.value)} 
+                  className="bg-white border border-slate-200 rounded-md px-3 py-1.5 text-sm text-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 cursor-pointer"
+                >
+                  <option value="Tous">Tous les carburants</option>
                   <option value="Diesel">Diesel</option>
                   <option value="Essence">Essence</option>
                   <option value="Hybride">Hybride</option>
                   <option value="Electrique">Électrique</option>
                 </select>
-                <select value={tri} onChange={(e) => setTri(e.target.value)} className="border border-neutral-600 focus:border-black focus:outline-none px-4 py-1 text-xs font-mono uppercase tracking-wider bg-transparent cursor-pointer">
-                  <option value="defaut">Tri : Par défaut</option>
-                  <option value="prix-croissant">Prix : Croissant</option>
-                  <option value="prix-decroissant">Prix : Décroissant</option>
-                  <option value="km-croissant">KM : Croissant</option>
-                  <option value="km-decroissant">KM : Décroissant</option>
+                <select 
+                  value={tri} 
+                  onChange={(e) => setTri(e.target.value)} 
+                  className="bg-white border border-slate-200 rounded-md px-3 py-1.5 text-sm text-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 cursor-pointer"
+                >
+                  <option value="defaut">Tri recommandé</option>
+                  <option value="prix-croissant">Prix croissant</option>
+                  <option value="prix-decroissant">Prix décroissant</option>
+                  <option value="km-croissant">Kilométrage croissant</option>
+                  <option value="km-decroissant">Kilométrage décroissant</option>
                 </select>
               </div>
             </div>
@@ -72,7 +84,7 @@ function App() {
             )}
           </>
         )}
-    </>
+    </div>
   )
 }
 
