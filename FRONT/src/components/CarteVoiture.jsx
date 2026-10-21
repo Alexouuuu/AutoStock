@@ -1,4 +1,5 @@
-function CarteVoiture({ voiture, onSelectionner }) {
+function CarteVoiture({ voiture, onSelectionner, onDelete }) {
+
   return (
     <article 
       onClick={onSelectionner}
@@ -48,6 +49,7 @@ function CarteVoiture({ voiture, onSelectionner }) {
           </span>
         </div>
       </div>
+      <button onClick={(e)=>{e.stopPropagation(); onDelete();}} className="text-red-600 hover:underline mt-2">Supprimer</button>
     </article>
   );
 }

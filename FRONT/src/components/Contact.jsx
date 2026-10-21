@@ -1,7 +1,43 @@
+import { useState } from 'react';
+
 function Contact() {
+    const [formData, setFormData] = useState({
+        nomPrenom: "",
+        email: "",
+        telephone: "",
+        motif: "Demande d'informations",
+        message: ""
+    });
+
+    const handleChange = (e) => {
+        setFormData({...formData, [e.target.name]: e.target.value});
+    };
+
     const handleSubmit = (e) => {
         e.preventDefault();
-        alert("Message envoyé !");
+
+        fetch("http://localhost:8080/api/contact", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(formData)
+        })
+        .then((response) => response.json())
+        .then((donnees) => {
+            alert("Votre message a bien été enregistré");
+            setFormData({
+                nomPrenom: "",
+                email: "",
+                telephone: "",
+                motif: "Demande d'informations",
+                message:"",
+            });
+        })
+        .catch((error) => {
+            console.error("Erreur lors de l'envoi :", error);
+            alert("Erreur lors de l'envoi du message.");
+        });
     };
 
     return ( 
@@ -12,27 +48,27 @@ function Contact() {
             <form onSubmit={handleSubmit} className="flex flex-col gap-3">
                 <div className="flex flex-col gap-1.5">
                     <label className="text-xs font-semibold text-slate-700">Nom & Prénom</label>
-                    <input className="border rounded-sm py-1 px-2" placeholder="Nom Prénom"></input>
+                    <input className="border rounded-sm py-1 px-2" name="nomPrenom" value={formData.nomPrenom} onChange={handleChange} placeholder="Nom Prénom"></input>
                 </div>
                 <div className="flex flex-col gap-1.5">
                     <label className="text-xs font-semibold text-slate-700">Email</label>
-                    <input className="border rounded-sm py-1 px-2" placeholder="Email" type="email"></input>
+                    <input className="border rounded-sm py-1 px-2" placeholder="Email" type="email" name="email" value={formData.email} onChange={handleChange}></input>
                 </div>
                 <div className="flex flex-col gap-1.5">
                     <label className="text-xs font-semibold text-slate-700">Telephone</label>
-                    <input className="border rounded-sm py-1 px-2" placeholder="Telephone" type="tel"></input>
+                    <input className="border rounded-sm py-1 px-2" placeholder="Telephone" type="tel" name="telephone" value={formData.telephone} onChange={handleChange}></input>
                 </div>
                 <div className="flex flex-col gap-1.5">
                     <label className="text-xs font-semibold text-slate-700">Motif</label>
-                    <select className="border rounded-sm py-1 px-2">
+                    <select className="border rounded-sm py-1 px-2" name="motif" value={formData.motif} onChange={handleChange}>
                         <option>Demande d'informations</option>
                         <option>Demande d'essai</option>
                         <option>Estimation de Reprise</option>
                     </select>
                 </div>
                 <div className="flex flex-col gap-1.5">
-                    <label className="text-xs font-semibold text-slate-700">Votre Message</label>
-                    <textarea className="border rounded-sm py-1 px-2" rows="4" placeholder="Message"></textarea>
+                    <label className="text-xs font-semibold text-slate-700" >Votre Message</label>
+                    <textarea className="border rounded-sm py-1 px-2" rows="4" placeholder="Message" name="message" value={formData.message} onChange={handleChange}></textarea>
                 </div>
                 <button className="rounded-full text-white bg-blue-400 py-2 px-2 font-semibold cursor-pointer hover:bg-blue-500" type="submit">Envoyer</button>
             </form>

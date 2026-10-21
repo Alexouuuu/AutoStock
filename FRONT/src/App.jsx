@@ -5,6 +5,7 @@ import CarteVoiture from "./components/CarteVoiture"
 import DetailsVoiture from "./components/DetailsVoiture"
 import Footer from "./components/Footer"
 import Contact from "./components/Contact"
+import AjoutVoiture from "./components/AjoutVoiture"
 
 function App() {
   const [recherche, setRecherche] = useState("");
@@ -13,6 +14,19 @@ function App() {
   const [voitureSelectionnee, setVoitureSelectionnee] = useState(null);
   const [page, setPage] = useState("catalogue");
   const [listeVoitures, setListeVoitures] = useState([]);
+  const handleVoitureAjoutee = (nouvelleVoiture) => {
+    setListeVoitures(prev => [...prev, nouvelleVoiture]);
+  };
+  const handleDelete = (id) => {
+    console.log('Attempting delete id:', id);
+    fetch(`http://localhost:8080/api/voitures/${id}`, { method: 'DELETE' })
+      .then(() => {
+        console.log('Delete success, updating state');
+        setListeVoitures(prev => prev.filter(v => v.id !== id));
+      })
+      .catch(err => console.error('Erreur suppression', err));
+  };
+  const [adminMode, setAdminMode] = useState(false); //basculer mode admin temporairement pour test
 
   useEffect(() => {
     fetch("http://localhost:8080/api/voitures")
@@ -41,6 +55,9 @@ function App() {
         setPage(nouvellePage);
         setVoitureSelectionnee(null);
       }} pageActive={page} />
+
+      <button onClick={() => setAdminMode(!adminMode)} className="bg-indigo-600 text-white py-1 px-3 rounded mt-4"> {adminMode ? "Fermer l'admin" : "Passer en admin"}</button>
+      {adminMode && <AjoutVoiture onVoitureAjoutee={handleVoitureAjoutee} />}
 
       <main className="flex-1">
         {page === "contact" ? (
@@ -94,7 +111,7 @@ function App() {
                 <p className="text-center font-bold my-8">Aucun véhicule ne correspond à votre recherche.</p>) : (
                   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 p-6 max-w-7xl mx-auto">
                     {voituresTriees.map((voiture) => (
-                      <CarteVoiture key={voiture.id} voiture={voiture} onSelectionner={() => setVoitureSelectionnee(voiture)}/>))}
+                      <CarteVoiture key={voiture.id} voiture={voiture} onSelectionner={() => setVoitureSelectionnee(voiture)} onDelete={() => handleDelete(voiture.id)}/>))}
                   </div>
               )}
             </>
