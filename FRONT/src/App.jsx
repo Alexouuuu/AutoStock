@@ -6,8 +6,14 @@ import DetailsVoiture from "./components/DetailsVoiture"
 import Footer from "./components/Footer"
 import Contact from "./components/Contact"
 import AjoutVoiture from "./components/AjoutVoiture"
+import AuthModal from "./components/AuthModal"
 
 function App() {
+  const [utilisateurConnecte, setUtilisateurConnecte] = useState(null);
+  const [authModalOuverte, setAuthModalOuverte] = useState(false);
+  const handleDeconnexion = () => { setUtilisateurConnecte(null) };
+  const estAdmin = utilisateurConnecte?.role?.nom === "ROLE_ADMIN";
+
   const [recherche, setRecherche] = useState("");
   const [carburant, setCarburant] = useState("Tous");
   const [tri, setTri] = useState("defaut");
@@ -54,10 +60,14 @@ function App() {
       <Header onNaviguer={(nouvellePage) => {
         setPage(nouvellePage);
         setVoitureSelectionnee(null);
-      }} pageActive={page} />
+      }} pageActive={page} 
+      utilisateurConnecte={utilisateurConnecte} 
+      onOuvrirAuth={() => setAuthModalOuverte(true)}
+      onDeconnexion={handleDeconnexion} 
+      />
 
       <button onClick={() => setAdminMode(!adminMode)} className="bg-indigo-600 text-white py-1 px-3 rounded mt-4"> {adminMode ? "Fermer l'admin" : "Passer en admin"}</button>
-      {adminMode && <AjoutVoiture onVoitureAjoutee={handleVoitureAjoutee} />}
+      {estAdmin && <AjoutVoiture onVoitureAjoutee={handleVoitureAjoutee} />}
 
       <main className="flex-1">
         {page === "contact" ? (
@@ -121,6 +131,13 @@ function App() {
           setPage(nouvellePage);
           setVoitureSelectionnee(null);
         }} pageActive={page} />
+
+        <AuthModal isOpen={authModalOuverte} 
+        onFermer={() => setAuthModalOuverte(false)}
+        onConnexionReussie={(user) => {
+          setUtilisateurConnecte(user);
+          alert(`Bienvenue ${user.prenom} !`);
+        }} />
     </div>
   )
 }

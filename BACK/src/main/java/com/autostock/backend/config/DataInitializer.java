@@ -1,6 +1,8 @@
 package com.autostock.backend.config;
 
 import com.autostock.backend.entity.Voiture;
+import com.autostock.backend.entity.Role;
+import com.autostock.backend.repository.RoleRepository;
 import com.autostock.backend.repository.VoitureRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
@@ -11,13 +13,26 @@ import java.util.List;
 public class DataInitializer implements CommandLineRunner {
     
     private final VoitureRepository voitureRepository;
+    private final RoleRepository roleRepository;
     
-    public DataInitializer(VoitureRepository voitureRepository) {
+    public DataInitializer(VoitureRepository voitureRepository, RoleRepository roleRepository) {
         this.voitureRepository = voitureRepository;
+        this.roleRepository = roleRepository;
     }
     
     @Override
     public void run(String... args) throws Exception {
+        
+        if (roleRepository.findByNom("ROLE_USER").isEmpty()) {
+            roleRepository.save(new Role("ROLE_USER"));
+            System.out.println("Role User créé");
+        }
+        
+        if (roleRepository.findByNom("ROLE_ADMIN").isEmpty()) {
+            roleRepository.save(new Role("ROLE_ADMIN"));
+            System.out.println("Role Admin créé");
+        }
+        
         if (voitureRepository.count() == 0) {
             List<Voiture> initialCars = List.of(
                 new Voiture(null, "BMW", "Serie 5", 2008, 7000, 300000, "Diesel", "Manuelle", 177, "Gris",
